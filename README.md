@@ -1,35 +1,34 @@
 # SumulationStudyABAM
-Aus zweitem Paper --> noch anpassen!
-Further information (R-Code, ADEMP structure of simulations) of Paper "A comparison of additional benefit assessment methods for time-to-event endpoints using hazard ratio point estimates or confidence interval limits by means of a simulation study".
-In this github repository the paper and associated appendix including the ADEMP structure of our simulations can be found. Furthermore, the folder "FiguresAndTable" include all Figures and Tables of our paper as well as some plots illustrating further results of our simulations. And last but not least, the R-Code of our simulations are shared in the folder "RPrograms". Please read the R-Code instruction below before performing it!
+This github respository provides the R-code to reproduce the results of the PhD-Thesis "Comparison of different additional benefit assessment methods for oncology treatments" of Christopher Alexander Büsch. The R-Code of both simulation studies are shared in the folder "RPrograms". Please read the R-Code instruction below before performing it!
 
 ## R-Code: 
-Please keep in mind that the following R-packages should be installed: tidyverse, patchwork, ggpubr, survival, flexsurv, pcaPP, data.table, vcd, cutpointr, foreach and doParallel. The provided programs are using the doParallel package for parallel computing in windows systems. If you have a unix-like system you need to install doMC instead of doParallel and replace 
+The following R-Packages need to be installed before R-Code usage: tidyverse, stringr, cutpointr, vcd, data.table, survival, flexsurv, irr, foreach and doParallel. This can be done by using the code provided hereafter:
+```r
+install.packages(c("tidyverse", "stringr", "cutpointr", "vcd", "data.table", "survival", "flexsurv", "irr", "foreach", "doParallel"))
+```
+The provided programs are using the doParallel package for parallel computing in windows systems. In case a unix-like system is used, the package doMC instead of doParallel needs to be installed. Furthermore, all occurrences of 
 ```r
 cl <- makeCluster(num.cl)
 registerDoParallel(cl)
 ```
-by
+need to be replaced by 
 ```r
 registerDoMC(num.cl)
 ```
-Furthermore, you need to remove all lines containing 
+Moreover, all lines containing 
 ```r
 stopCluster(cl)
 ```
-In addition, the running time of the programs (especially the data generation and data analysis) is very long. We performed it with parallel computing using 48 cores and still needed several days. Therefore, to reduce the running time, please use many cores for the parallel computing or reduce the number of iterations (n<sub>sim</sub>).
-
+need to be removed. In addition, the running time of the programs (especially the data generation and data analysis) can take even with multiple cores for parallel computing several days. Therefore, to reduce the running time, 40 cores or more is recommended. Another solution is to reduce the number of iterations (n.sim), which decreases, however, the precision of the simulation study.
 In the following several R-Code-Scripts are explained, which can be found in the folder "RPrograms":
-- Costume functions ("0_CostumeFunctions_Analysis.R" and "0_CostumeFunctions_DataGeneration.R"):
-  These two scripts contain all needed functions for the data generation and analysis. Hence, they need to be loaded before conducting the simulations. 
+- Costume functions for data generation and analysis of both simulation studies ("Sim1_0_Functions_DataGeneration.R", "Sim2_0_Functions_DataGeneration.R", "Sim1_0_Functions_Analysis.R" and "Sim2_0_Functions_Analysis.R"):
+  These four scripts contain all needed functions for the data generation and analysis. Hence, they need to be loaded before conducting the simulations. 
   
-- Data Generation ("1_DataGeneration.R"):
-  This script conducts the data generation for all four scenarios. At the beginning the working directory needs to be set, where the file "Simulation.seed" and the script "0_CostumeFunctions_DataGeneration.R" are saved. Furthermore, as mentioned above please keep the number of cores (num.cl) / number of iterations (n_sim) in mind so that the running time is not too long. At last the folder path for saving of the generated data should be supplied. 
+- Data Generation of both simulation studies ("Sim1_1_DataGeneration.R" and "Sim2_1_DataGeneration.R"):
+  These scripts conduct the data generation for all scenarios of both simulation studies. At the beginning the working directory needs to be set, where the file "Sim1_Simulation.seed" and the script "Sim1_0_Functions_DataGeneration.R" for Simulation 1 or the file "Sim2_Simulation.seed" and the script "Sim2_0_Functions_DataGeneration.R" for Simulation 2 are saved. Furthermore, as mentioned the number of cores (num.cl) and number of iterations (n.sim) need to be kept in mind so that the running time is not increased too much. At last the folder path for saving of the generated data needs to be specified. 
   
-- Data Analysis ("2_DataAnalysis.R"):
-  This script conducts the data analysis of the generated data for all four scenarios. At the beginning the working directory needs to be set, where the script "0_CostumeFunctions_DataGeneration.R" is saved. Furthermore, as mentioned above please keep the number of cores (num.cl) in mind so that the running time is not too long. At last the folder path for saving of the analysed data (path_ana) and the folder path for the generated data (path_data) should be supplied. 
+- Data Analysis of both simulation studies ("Sim1_2_DataAnalysis.R" and "Sim2_2_DataAnalysis.R"):\\
+  These scripts conduct the data analysis of the generated data for all scenarios of both simulation studies. At the beginning the working directory needs to be set, where the script "Sim1_0_Functions_Analysis.R" for Simulation 1 or where the script "Sim2_0_Functions_Analysis.R" for Simulation 2 is saved. Furthermore, as mentioned the number of cores (num.cl) and number of iterations (n.sim) need to be kept in mind so that the running time is not increased too much. At last the folder path, where the generated data was saved (path_data), and the folder path, where the analysed data should be saved (path_ana) needs to be specified. 
   
-- Calculating ASCO cutoff values ("2_DataAnalysis_ASCO_CutoffValues.R"): This script conducts the investigating which ESMO / IQWiG<sub>RR</sub> / Mod-IQWiG<sub>HR</sub> category correspond to which ASCO score. At the beginning the working directory for the analysed data from "2_DataAnalysis.R" needs to be set. In addition, the folder path for saving of the calculated ASCO cutoff values (path_saving_cutoffs) need to be specified. As mentioned above please keep the number of cores (num.cl) in mind so that the running time is not too long.
-
-- Visualizations ("3_VisualizationsOfResults.R"):
-  This script creates all figures of the paper. In addition, it provides the Figures 1 and 2 of the Appendix. At the beginning you need to set three working directories. Firstly, to the folder where the final results of the script "2_DataAnalysis.R" is saved (path_ana). Secondly, to the folder where the generated data is saved (path_data). And thirdly, to the folder where the calculated ASCO cutoff values are saved (path_saving_cutoffs).
+- Optimal cutoff cutoff determination of both simulation studies ("Sim1_3_DataAnalysis_ASCO_CutoffValues.R" and "Sim2_3_DataAnalysis_ASCO_CutoffValues.R"): 
+	These scripts conduct the investigating which ESMO/\IQWiG/\ModIQWiGspace category correspond to which ASCO score for both simulation studies. At the beginning the folder path, where the generated data and analysed data was saved, needs to be specified. As mentioned the number of cores (num.cl) and number of iterations (n.sim) need to be kept in mind so that the running time is not increased too much.
