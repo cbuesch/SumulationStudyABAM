@@ -235,7 +235,7 @@ WeightedCohensKappa_ModIQWiG_HR_ASCO  <- function(x, df.){
 
 # Calculating cutpoints
 results_cutpoints <- matrix(
-  list(), nrow=10, ncol = 24,
+  list(), nrow=10, ncol = 21,
   dimnames = list(Scenarios = c("Scen1", "Scen2Overpowered", "Scen2Underpowered",
                                 "Scen3WEIB", "Scen3WEIBDecreasingHazard", "Scen3WEIBIncreasingHazard",
                                 "Scen3GOMP", "Scen3GOMPDecreasingHazard", "Scen3GOMPIncreasingHazard",
