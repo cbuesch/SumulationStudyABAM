@@ -1,4 +1,4 @@
-# SumulationStudyABAM
+# SimulationStudyABAM
 This github respository provides the R-code to reproduce the results of the PhD-Thesis "Comparison of different additional benefit assessment methods for oncology treatments" of Christopher Alexander Büsch. The R-Code of both simulation studies are shared in the folder "RPrograms". Please read the R-Code instruction below before performing it!
 
 ## R-Code: 
